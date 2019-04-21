@@ -19,6 +19,12 @@ public class EventManager {
         return this.repository.add(ev);
     }
 
+    public List<Event> getEventsWithLocation(List<String> Location){
+        Query<Event> qr = new Query<>();
+        qr.filter(locsQuery(Location));
+        return repository.getAll(qr);
+    }
+
     public List<Event> getEventsOlderThan(Date date){
         Query<Event> qr = new Query<>();
         qr.filter(dateQuery(dateQr.older, date));
@@ -74,5 +80,9 @@ public class EventManager {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    private Predicate<Event> locsQuery(List<String> locations){
+        return ev -> ev.getLocations().containsAll(locations);
     }
 }

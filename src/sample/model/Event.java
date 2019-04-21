@@ -7,7 +7,7 @@ import java.util.List;
 public class Event {
     private Date dateTime;
     private String description;
-    private List locations = new LinkedList();
+    private List<String> locations = new LinkedList<>();
 
     public Event(Date dateTime) {
         this.dateTime = dateTime;
@@ -19,7 +19,7 @@ public class Event {
         this.description = description;
     }
 
-    public Event(Date dateTime, String description, List locations) {
+    public Event(Date dateTime, String description, List<String> locations) {
         this.dateTime = dateTime;
         this.description = description;
         this.locations = locations;
@@ -33,7 +33,7 @@ public class Event {
         return description;
     }
 
-    public List getLocations() {
+    public List<String> getLocations() {
         return locations;
     }
 }
