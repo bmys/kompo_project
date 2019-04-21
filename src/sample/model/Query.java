@@ -25,6 +25,21 @@ public class Query<T> {
         return stream.collect(Collectors.toList());
     }
 
+    public T getFirst(List<T> col) {
+        Stream<T> stream = col.stream();
+
+        for (Predicate<T> tsk: tasks) {
+            stream = stream.filter(tsk);
+        }
+
+        if(stream.findFirst().isPresent()){
+            return stream.findFirst().get();
+        }
+        else{
+            return null;
+        }
+    }
+
     public class QueryResult<T> {
         List<T> result;
         List<String> errors;

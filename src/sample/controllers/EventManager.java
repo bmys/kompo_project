@@ -19,7 +19,6 @@ public class EventManager {
         return this.repository.add(ev);
     }
 
-
     public List<Event> getEventsOlderThan(Date date){
         Query<Event> qr = new Query<>();
         qr.filter(dateQuery(dateQr.older, date));
@@ -45,6 +44,13 @@ public class EventManager {
         qr
                 .filter(dateQuery(dateQr.newer, dateFirst))
                 .filter(dateQuery(dateQr.older, dateSecond));
+        return repository.get(qr);
+    }
+
+    public Event removeEventsOlderThan(Date date){
+        Query<Event> qr = new Query<>();
+        qr.filter(dateQuery(dateQr.older, date));
+
         return repository.get(qr);
     }
 

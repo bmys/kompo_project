@@ -14,19 +14,18 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
     @Override
     public Boolean add(T el) {
         try{
-            this.repository.add(el);
+            repository.add(el);
             return true;
         }
         catch(Exception e){
             return false;
         }
-
     }
 
     @Override
     public Boolean addAll(Collection<T> col) {
         try{
-            this.repository.addAll(col);
+            repository.addAll(col);
             return true;
         }
         catch(Exception e){
@@ -37,7 +36,7 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
     @Override
     public Boolean remove(int idx) {
         try{
-            this.repository.remove(idx);
+            repository.remove(idx);
             return true;
         }
         catch(Exception e){
@@ -48,7 +47,7 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
     @Override
     public T get(int idx) {
         try{
-            return this.repository.get(idx);
+            return repository.get(idx);
         }
         catch(Exception e){
             return null;
@@ -57,32 +56,41 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
 
     @Override
     public List<T> getAll() {
-        return this.repository;
+        return repository;
     }
 
     @Override
     public int getSize() {
-        return this.repository.size();
+        return repository.size();
     }
 
     @Override
     public Boolean exits(T el) {
-        return this.repository.contains(el);
+        return repository.contains(el);
     }
 
     @Override
     public Boolean remove(T el) {
         try{
-            return this.repository.remove(el);
+            repository.remove(el);
+            return true;
+
         }
         catch(Exception e){
-            return null;
+            return false;
         }
     }
 
     @Override
-    public Boolean remove(Query qr) {
-        return null;
+    public Boolean remove(Query<T> qr) {
+        try{
+            List<T> result = qr.getResult(repository);
+            repository.removeAll(result);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     @Override
@@ -96,9 +104,8 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
     }
 
     @Override
-    public T get(Query qr) {
-
-        return null;
+    public T get(Query<T> qr) {
+        return qr.getFirst(repository);
     }
 
     @Override
@@ -109,27 +116,44 @@ public abstract class ListRepository<T> implements Repository<List<T>, T> {
     @Override
     public Boolean update(T el, T newEl) {
         try{
-
-            return false;
+            int idx = repository.indexOf(el);
+            if (idx == -1) return false;
+            repository.set(idx, newEl);
+            return true;
         }
         catch(Exception e){
-            return null;
+            return false;
         }
     }
 
     @Override
     public Boolean update(int idx, T newEl) {
-        return null;
+        try{
+            repository.set(idx, newEl);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     @Override
-    public Boolean update(Query qr, T newEl) {
-        return null;
+    public Boolean update(Query<T> qr, T newEl) {
+//        todo: try to change query to map
+        try{
+            T el = get(qr);
+            int idx = repository.indexOf(el);
+            repository.set(idx, newEl);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     @Override
-    public Boolean exits(Query qr) {
-        return null;
+    public Boolean exits(Query<T> qr) {
+        return get(qr) != null;
     }
 
 
