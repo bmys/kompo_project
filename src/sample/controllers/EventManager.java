@@ -31,33 +31,33 @@ public class EventManager {
         return repository.getAll(qr);
     }
 
-    public Event getEventsnewerThan(Date date){
+    public List<Event> getEventsnewerThan(Date date){
         Query<Event> qr = new Query<>();
         qr.filter(dateQuery(dateQr.newer, date));
-        return repository.get(qr);
+        return repository.getAll(qr);
     }
 
-    public Event getEventsfromTimeBound(Date dateFirst, Date dateSecond){
+    public List<Event> getEventsfromTimeBound(Date dateFirst, Date dateSecond){
         Query<Event> qr = new Query<>();
                 qr
                 .filter(dateQuery(dateQr.newer, dateFirst))
                 .filter(dateQuery(dateQr.older, dateSecond));
-        return repository.get(qr);
+        return repository.getAll(qr);
     }
 
-    public Event removeEventsfromTimeBound(Date dateFirst, Date dateSecond){
+    public Boolean removeEventsfromTimeBound(Date dateFirst, Date dateSecond){
         Query<Event> qr = new Query<>();
         qr
                 .filter(dateQuery(dateQr.newer, dateFirst))
                 .filter(dateQuery(dateQr.older, dateSecond));
-        return repository.get(qr);
+        return repository.remove(qr);
     }
 
-    public Event removeEventsOlderThan(Date date){
+    public Boolean removeEventsOlderThan(Date date){
         Query<Event> qr = new Query<>();
         qr.filter(dateQuery(dateQr.older, date));
 
-        return repository.get(qr);
+        return repository.remove(qr);
     }
 
 
