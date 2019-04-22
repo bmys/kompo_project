@@ -69,13 +69,13 @@ public class EventManager {
         switch(time){
 
             case older:
-                return ev -> ev.getDate().compareTo(date) < 0;
+                return ev -> ev.getDateTime().compareTo(date) < 0;
 
             case same:
-                return ev -> ev.getDate().compareTo(date) == 0;
+                return ev -> ev.getDateTime().compareTo(date) == 0;
 
             case newer:
-                return ev -> ev.getDate().compareTo(date) > 0;
+                return ev -> ev.getDateTime().compareTo(date) > 0;
 
             default:
                 throw new IllegalArgumentException();
