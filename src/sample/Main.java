@@ -9,10 +9,13 @@ import sample.controllers.EventManager;
 import sample.dao.EventDAO;
 import sample.model.*;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 
 public class Main extends Application {
 
@@ -25,7 +28,7 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JAXBException {
 
 //        Query<Event> query = new Query<>();
 //        Event event = new Event(new Date());
@@ -42,16 +45,36 @@ public class Main extends Application {
 //        List<Event> ev = eventManager.getEventsOlderThan(dt);
 //        System.out.println(ev);
 
-        EventDAO eventDAO = new EventDAO();
-        LinkedListRepository<Event> linkedListRepository = new LinkedListRepository<>();
-//        linkedListRepository.registerObserver(eventDAO);
+//        EventDAO eventDAO = new EventDAO();
+//        LinkedListRepository<Event> linkedListRepository = new LinkedListRepository<>();
+////        linkedListRepository.registerObserver(eventDAO);
+//
+//        Event ev = new Event("Hello", new Date());
+//        linkedListRepository.add(ev);
+//        linkedListRepository.add(new Event("World!", new Date()));
+//        System.out.println(linkedListRepository.getSize());
+//        linkedListRepository.remove(ev);
+//        System.out.println(linkedListRepository.getSize());
 
         Event ev = new Event("Hello", new Date());
-        linkedListRepository.add(ev);
-        linkedListRepository.add(new Event("World!", new Date()));
-        System.out.println(linkedListRepository.getSize());
-        linkedListRepository.remove(ev);
-        System.out.println(linkedListRepository.getSize());
+        System.out.println("elo");
+
+   try{
+       File file = new File("./out.xml");
+       JAXBContext jaxbContext = JAXBContext.newInstance(Event.class);
+       Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+       // output pretty printed
+       jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+       jaxbMarshaller.marshal(ev, file);
+       jaxbMarshaller.marshal(ev, System.out);
+
+    } catch(JAXBException e) {
+        e.printStackTrace();
+    }
+
+
 
 //        launch(args);
     }
