@@ -45,9 +45,12 @@ public class Main extends Application {
         EventDAO eventDAO = new EventDAO();
         LinkedListRepository<Event> linkedListRepository = new LinkedListRepository<>();
         linkedListRepository.registerObserver(eventDAO);
-
+        Event ev = new Event(new Date());
+        linkedListRepository.add(ev);
         linkedListRepository.add(new Event(new Date()));
-
+        System.out.println(linkedListRepository.getSize());
+        linkedListRepository.remove(ev);
+        System.out.println(linkedListRepository.getSize());
 
 //        launch(args);
     }
