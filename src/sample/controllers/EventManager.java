@@ -1,18 +1,24 @@
 package sample.controllers;
 
+import javafx.util.Pair;
+import sample.dao.EventSQLDAO;
 import sample.model.Event;
 import sample.model.LinkedListRepository;
 import sample.model.Query;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class EventManager {
     private LinkedListRepository<Event> repository;
+    private EventSQLDAO eventSQLDAO = new EventSQLDAO();
 
     public EventManager() {
         this.repository = new LinkedListRepository<>();
+        this.repository.registerObserver(eventSQLDAO);
     }
 
     public boolean addEvent(Event ev){
@@ -58,6 +64,30 @@ public class EventManager {
         qr.filter(dateQuery(dateQr.older, date));
 
         return repository.remove(qr);
+    }
+
+    public Boolean changeDate(Event event, Date time){
+        Event newEvent = new Event(event);
+        newEvent.setDateTime(time);
+        return repository.update(event, newEvent);
+    }
+
+    public Boolean changeDate(List<Event> events, Date time){
+        List<Pair<Event, Event>> updatedEvents = new LinkedList<>();
+
+        for (Event ev: events) {
+            Event nev = new Event(ev);
+            nev.setDateTime(time);
+            updatedEvents.add(new Pair<Event, Event>(ev, nev));
+        }
+
+        for(Pair<Event, Event> pair: updatedEvents){
+            if(!repository.update(pair.getKey(), pair.getValue())){
+                // log error
+                return false;
+            }
+        }
+        return true;
     }
 
 

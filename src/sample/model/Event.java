@@ -21,6 +21,14 @@ public class Event {
     public Event() {
     }
 
+    public Event(Event ev) {
+        this.uniqueID = ev.uniqueID;
+        this.title = ev.title;
+        this.dateTime = ev.dateTime;
+        this.description = ev.description;
+        this.locations = ev.locations;
+    }
+
     public Event(String title, Date dateTime, String description, List<String> locations) {
         this.title = title;
         this.dateTime = dateTime;

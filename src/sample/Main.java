@@ -5,18 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.controllers.EventManager;
-import sample.dao.EventDAO;
-import sample.dao.SQLDAO;
-import sample.model.*;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -30,33 +20,33 @@ public class Main extends Application {
 
 
     public static void main(String[] args) throws JAXBException {
-        SQLDAO sql = new SQLDAO();
-        sql.connect();
-        Query<Event> query = new Query<>();
-        Event event = new Event(new Date());
-        EventManager eventManager = new EventManager();
-        Boolean wynik = eventManager.addEvent(event);
-        System.out.println(wynik);
-
-        Date dt = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(dt);
-        c.add(Calendar.DATE, -1);
-        dt = c.getTime();
-
-        List<Event> ev = eventManager.getEventsOlderThan(dt);
-        System.out.println(ev);
-
-        EventDAO eventDAO = new EventDAO();
-        LinkedListRepository<Event> linkedListRepository = new LinkedListRepository<>();
-//        linkedListRepository.registerObserver(eventDAO);
-
-        Event ev2 = new Event("Hello", new Date());
-        linkedListRepository.add(ev2);
-        linkedListRepository.add(new Event("World!", new Date()));
-        System.out.println(linkedListRepository.getSize());
-        linkedListRepository.remove(ev2);
-        System.out.println(linkedListRepository.getSize());
+//        SQLDAO sql = new SQLDAO();
+//        sql.connect();
+//        Query<Event> query = new Query<>();
+//        Event event = new Event( "date", new Date() , "description", new ArrayList<String>(Arrays.asList("a", "b")));
+//        EventManager eventManager = new EventManager();
+//        Boolean wynik = eventManager.addEvent(event);
+//        System.out.println(wynik);
+//
+//        Date dt = new Date();
+//        Calendar c = Calendar.getInstance();
+//        c.setTime(dt);
+//        c.add(Calendar.DATE, -1);
+//        dt = c.getTime();
+//
+//        List<Event> ev = eventManager.getEventsOlderThan(dt);
+//        System.out.println(ev);
+//
+//        EventSQLDAO eventDAO = new EventSQLDAO();
+//        LinkedListRepository<Event> linkedListRepository = new LinkedListRepository<>();
+////        linkedListRepository.registerObserver(eventDAO);
+//
+//        Event ev2 = new Event("Hello", new Date());
+//        linkedListRepository.add(ev2);
+//        linkedListRepository.add(new Event("World!", new Date()));
+//        System.out.println(linkedListRepository.getSize());
+//        linkedListRepository.remove(ev2);
+//        System.out.println(linkedListRepository.getSize());
 
 //        Event ev = new Event("Hello", new Date());
 //        System.out.println("elo");
