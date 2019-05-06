@@ -34,6 +34,12 @@ public class Event {
         this.description = "";
     }
 
+    public Event(Date dateTime) {
+        this.title = "0";
+        this.dateTime = dateTime;
+        this.description = "1";
+    }
+
 
     public Event(String title, Date dateTime, String description) {
         this.title = title;
