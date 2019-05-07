@@ -2,7 +2,7 @@ package sample.model;
 
 import java.util.Date;
 
-public abstract class Reminder {
+public class Reminder {
     private Event ev;
     private Date time;
 
@@ -11,9 +11,12 @@ public abstract class Reminder {
         this.time = time;
     }
 
-    public void checkTime(Date currentTime){
+    public boolean checkTime(Date currentTime){
         if(currentTime.compareTo(time) > 0){
             System.out.println("Reminder!");
+            return true;
         }
+
+        return false;
     }
 }

@@ -3,10 +3,9 @@ package sample.controllers;
 import javafx.util.Pair;
 import sample.dao.EventSQLDAO;
 import sample.model.Event;
-import sample.model.LinkedListRepository;
-import sample.model.Query;
+import sample.model.Repository.LinkedListRepository;
+import sample.model.Repository.Query;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;

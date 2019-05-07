@@ -5,8 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.model.Event;
+import sample.model.Reminder;
 
 import javax.xml.bind.JAXBException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Main extends Application {
 
@@ -18,8 +23,23 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    public class MyThread extends Thread {
+        Reminder reminder;
 
-    public static void main(String[] args) throws JAXBException {
+        public MyThread(Reminder rem) {
+            reminder = rem;
+        }
+
+        public void run(){
+            while(true){
+                if(reminder.checkTime(new Date())){
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
 //        SQLDAO sql = new SQLDAO();
 //        sql.connect();
 //        Query<Event> query = new Query<>();
@@ -48,27 +68,20 @@ public class Main extends Application {
 //        linkedListRepository.remove(ev2);
 //        System.out.println(linkedListRepository.getSize());
 
-//        Event ev = new Event("Hello", new Date());
-//        System.out.println("elo");
-//
-//   try{
-//       File file = new File("./out.xml");
-//       JAXBContext jaxbContext = JAXBContext.newInstance(Event.class);
-//       Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-//
-//       // output pretty printed
-//       jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//
-//       jaxbMarshaller.marshal(ev, file);
-//       jaxbMarshaller.marshal(ev, System.out);
-//
-//    } catch(JAXBException e) {
-//        e.printStackTrace();
-//    }
-//
+
 
 
 //        launch(args);
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.SECOND, 15);
+
+        Event ev2 = new Event("Hello", new Date());
+
+        Reminder reminder = new Reminder(ev2, cal.getTime());
+        while(!reminder.checkTime(new Date()));
+//        MyThread myThread = new MyThread(reminder);
+//
+
 
 
     }
