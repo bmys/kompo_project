@@ -85,6 +85,9 @@ public class Controller implements Initializable{
     @FXML
     private DatePicker listDatePicker;
 
+    @FXML
+    private TextField locationText;
+
     public void addEvent(){
         String title = titleText.getText();
 
@@ -107,11 +110,12 @@ public class Controller implements Initializable{
 //        eventList.add();
 
 //        System.out.println(strList);
-        eventManager.addEvent(new Event(title, date, desc));
+        String locations = locationText.getText().toLowerCase();
+        List<String> locationList = new ArrayList(Arrays.asList(locations.split(" ")));
+        eventManager.addEvent(new Event(title, date, desc, locationList));
 //        eventListView.getItems().clear();
 //        eventListView.getItems().addAll(eventList);
 
-        //eventListView.refresh();
     }
 
     public void deleteEvent(){
