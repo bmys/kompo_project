@@ -9,17 +9,31 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<SplitPane dividerPositions="0.4079173838209983" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="583.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.Controller">
+<SplitPane dividerPositions="0.5197934595524957" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="583.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.Controller">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="242.0">
          <children>
             <VBox layoutX="14.0" layoutY="14.0" prefHeight="375.0" prefWidth="198.0">
                <children>
-                  <DatePicker fx:id="listDatePicker">
+                  <DatePicker fx:id="listDatePicker" prefHeight="25.0" prefWidth="169.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </DatePicker>
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="198.0">
+                     <children>
+                        <DatePicker fx:id="toDatePicker" disable="true">
+                           <HBox.margin>
+                              <Insets bottom="2.0" />
+                           </HBox.margin>
+                        </DatePicker>
+                        <CheckBox fx:id="useTimeBoundCheck" onAction="#changeGoDate" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </CheckBox>
+                     </children>
+                  </HBox>
                   <ListView fx:id="eventListView" prefHeight="200.0" prefWidth="136.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />

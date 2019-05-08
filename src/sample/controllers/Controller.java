@@ -7,8 +7,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import sample.model.Event;
 
+import java.awt.*;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -19,45 +23,12 @@ public class Controller implements Initializable{
 //    private ObservableList<Event> observableList;
 //    private List<Event> eventList = new ArrayList<>();
 
-//    private List<String> strList = new LinkedList<>();
     private ObservableList<Event> observableList;
     private ListProperty<Event> eventListProperty;
 
     public Controller() {
         System.out.println("HEllo!");
     }
-
-//    @Override
-//    public void initialize() {
-//
-//        ObservableList<String> observableList = FXCollections.observableList(strList);
-//        eventListView.setItems(observableList);
-
-//        eventListView.setCellFactory(new Callback<ListView<Event>, ListCell<Event>>(){
-//
-//            @Override
-//            public ListCell<Event> call(ListView<Event> p) {
-//
-//                ListCell<Event> cell = new ListCell<Event>(){
-//
-//                    @Override
-//                    protected void updateItem(Event t, boolean bln) {
-//                        super.updateItem(t, bln);
-//                        if (t != null) {
-//                            setText(t.getTitle() + ":" + t.getDateTime());
-//                        }
-//                    }
-//
-//                };
-//
-//                return cell;
-//            }
-//        });
-//
-//    }
-
-
-
 
     private EventManager eventManager = new EventManager();
 
@@ -88,6 +59,12 @@ public class Controller implements Initializable{
     @FXML
     private TextField locationText;
 
+    @FXML
+    private CheckBox useTimeBoundCheck;
+
+    @FXML
+    private DatePicker toDatePicker;
+
     public void addEvent(){
         String title = titleText.getText();
 
@@ -102,17 +79,12 @@ public class Controller implements Initializable{
             date = Date.from(instant);
         }
 
-
-//        strList.add(title);
-
         String desc = descText.getText();
-//        System.out.println("Title: " + title + "Description: " + desc + "\n");
-//        eventList.add();
 
-//        System.out.println(strList);
         String locations = locationText.getText().toLowerCase();
-        List<String> locationList = new ArrayList(Arrays.asList(locations.split(" ")));
+        ArrayList<String> locationList = new ArrayList<>(Arrays.asList(locations.split(" ")));
         eventManager.addEvent(new Event(title, date, desc, locationList));
+
 //        eventListView.getItems().clear();
 //        eventListView.getItems().addAll(eventList);
 
@@ -131,6 +103,10 @@ public class Controller implements Initializable{
 
     }
 
+    public void changeGoDate(){
+        toDatePicker.setDisable(!useTimeBoundCheck.isSelected());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableList = FXCollections.observableArrayList();
@@ -139,44 +115,5 @@ public class Controller implements Initializable{
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
         eventManager = new EventManager(observableList);
         eventManager.addSQLDAO();
-
-//        eventListView.setCellFactory(new Callback<ListView<Event>, ListCell<Event>>(){
-
-//            @Override
-//            public ListCell<String> call(ListView<String> p) {
-//
-//                ListCell<String> cell = new ListCell<String>(){
-//
-//                    @Override
-//                    protected void updateItem(String t, boolean bln) {
-//                        super.updateItem(t, bln);
-//                        if (t != null) {
-//                            setText(t + "xD");
-//                        }
-//                    }
-//
-//                };
-//
-//                return cell;
-//            }
-//        });
-//            @Override
-//            public ListCell<Event> call(ListView<Event> p) {
-//
-//                ListCell<Event> cell = new ListCell<Event>(){
-//
-//                    @Override
-//                    protected void updateItem(Event t, boolean bln) {
-//                        super.updateItem(t, bln);
-//                        if (t != null) {
-//                            setText(t.getDateTime().toString() + ":" );
-//                        }
-//                    }
-//
-//                };
-//
-//                return cell;
-//            }
-//        });
     }
 }
