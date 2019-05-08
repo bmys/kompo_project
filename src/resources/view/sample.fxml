@@ -15,19 +15,19 @@
          <children>
             <VBox layoutX="14.0" layoutY="14.0" prefHeight="375.0" prefWidth="198.0">
                <children>
-                  <DatePicker fx:id="listDatePicker" prefHeight="25.0" prefWidth="169.0">
+                  <DatePicker fx:id="listDatePicker" onAction="#updateEventList" prefHeight="25.0" prefWidth="169.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </DatePicker>
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="198.0">
                      <children>
-                        <DatePicker fx:id="toDatePicker" disable="true">
+                        <DatePicker fx:id="toDatePicker" disable="true" onAction="#updateEventList">
                            <HBox.margin>
                               <Insets bottom="2.0" />
                            </HBox.margin>
                         </DatePicker>
-                        <CheckBox fx:id="useTimeBoundCheck" onAction="#changeGoDate" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false">
+                        <CheckBox fx:id="useTimeBoundCheck" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeGoDate">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

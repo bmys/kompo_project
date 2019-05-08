@@ -108,6 +108,7 @@ public class Controller implements Initializable{
 
     public void changeGoDate(){
         toDatePicker.setDisable(!useTimeBoundCheck.isSelected());
+        updateEventList();
     }
 
     @Override
@@ -131,7 +132,7 @@ public class Controller implements Initializable{
         return date;
     }
 
-    void updateEventList(){
+    public void updateEventList(){
         observableList.removeAll(observableList);
 
         Date from = localToDate(listDatePicker.getValue());
@@ -144,7 +145,7 @@ public class Controller implements Initializable{
             return;
         }
 
-        List<Event> evs =  eventManager.getEventsOlderThan(from);
+        List<Event> evs =  eventManager.getEventsFromDay(from);
         observableList.addAll(evs);
     }
 }

@@ -6,6 +6,8 @@ import sample.model.Event;
 import sample.model.Repository.LinkedListRepository;
 import sample.model.Repository.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +56,12 @@ public class EventManager {
     public List<Event> getEventsWithLocation(List<String> Location){
         Query<Event> qr = new Query<>();
         qr.filter(locsQuery(Location));
+        return repository.getAll(qr);
+    }
+
+    public List<Event> getEventsFromDay(Date date){
+        Query<Event> qr = new Query<>();
+        qr.filter(dateQuery(dateQr.same, date));
         return repository.getAll(qr);
     }
 
@@ -126,13 +134,15 @@ public class EventManager {
     }
 
     private Predicate<Event> dateQuery(dateQr time, Date date){
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+
         switch(time){
 
             case older:
                 return ev -> ev.getDateTime().compareTo(date) < 0;
 
             case same:
-                return ev -> ev.getDateTime().compareTo(date) == 0;
+                return ev -> fmt.format(ev.getDateTime()).equals(fmt.format(date));
 
             case newer:
                 return ev -> ev.getDateTime().compareTo(date) > 0;
