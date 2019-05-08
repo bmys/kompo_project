@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.List;
 
 public class Controller implements Initializable{
 //    private ObservableList<Event> observableList;
@@ -25,12 +26,12 @@ public class Controller implements Initializable{
 
     private ObservableList<Event> observableList;
     private ListProperty<Event> eventListProperty;
+    private EventManager eventManager = new EventManager(new LinkedList<>());
 
     public Controller() {
         System.out.println("HEllo!");
+        eventManager.addSQLDAO();
     }
-
-    private EventManager eventManager = new EventManager();
 
     @FXML
     private TextField titleText;
@@ -85,6 +86,7 @@ public class Controller implements Initializable{
         ArrayList<String> locationList = new ArrayList<>(Arrays.asList(locations.split(" ")));
         eventManager.addEvent(new Event(title, date, desc, locationList));
 
+        updateEventList();
 //        eventListView.getItems().clear();
 //        eventListView.getItems().addAll(eventList);
 
@@ -97,6 +99,7 @@ public class Controller implements Initializable{
         }
         System.out.println(observableList);
         System.out.println(eventManager.getAll());
+        updateEventList();
 
 //        System.out.println(eve);
 //        System.out.println(eventList);
@@ -113,7 +116,35 @@ public class Controller implements Initializable{
         eventListProperty = new SimpleListProperty<>();
         eventListProperty.set(observableList);
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
-        eventManager = new EventManager(observableList);
-        eventManager.addSQLDAO();
+
+    }
+
+    private Date localToDate(LocalDate localDate){
+        Date date;
+        if(localDate == null){
+            date = new Date();
+        }
+        else{
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            date = Date.from(instant);
+        }
+        return date;
+    }
+
+    void updateEventList(){
+        observableList.removeAll(observableList);
+
+        Date from = localToDate(listDatePicker.getValue());
+
+        if(useTimeBoundCheck.isSelected()){
+            Date to = localToDate(toDatePicker.getValue());
+            List<Event> evs = eventManager.getEventsfromTimeBound(from ,to);
+            System.out.println(evs);
+            observableList.addAll(evs);
+            return;
+        }
+
+        List<Event> evs =  eventManager.getEventsOlderThan(from);
+        observableList.addAll(evs);
     }
 }
