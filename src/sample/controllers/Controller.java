@@ -7,11 +7,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import sample.model.Event;
-import sample.model.Repository.ObservableListRepository;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class Controller implements Initializable{
@@ -61,7 +62,7 @@ public class Controller implements Initializable{
     private EventManager eventManager = new EventManager();
 
     @FXML
-    private TextField TitleText;
+    private TextField titleText;
 
     @FXML
     private ListView<Event> eventListView;
@@ -70,13 +71,7 @@ public class Controller implements Initializable{
     private Button addEventBtn;
 
     @FXML
-    private Button newLocBtn;
-
-    @FXML
     private Button changeDateBtn;
-
-    @FXML
-    private TextField newLocText;
 
     @FXML
     private Button deleteEventBtn;
@@ -88,13 +83,23 @@ public class Controller implements Initializable{
     private TextArea descText;
 
     @FXML
-    private ListView<String> locationsList;
-
-    @FXML
     private DatePicker listDatePicker;
 
     public void addEvent(){
-        String title = TitleText.getText();
+        String title = titleText.getText();
+
+        LocalDate localDate = newEventDatePicker.getValue();
+
+        Date date;
+        if(localDate == null){
+            date = new Date();
+        }
+        else{
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            date = Date.from(instant);
+        }
+
+
 //        strList.add(title);
 
         String desc = descText.getText();
@@ -102,7 +107,7 @@ public class Controller implements Initializable{
 //        eventList.add();
 
 //        System.out.println(strList);
-        eventManager.addEvent(new Event(title, new Date(), desc));
+        eventManager.addEvent(new Event(title, date, desc));
 //        eventListView.getItems().clear();
 //        eventListView.getItems().addAll(eventList);
 

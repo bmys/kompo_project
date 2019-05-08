@@ -27,7 +27,7 @@
                   </ListView>
                   <HBox prefHeight="31.0" prefWidth="198.0">
                      <children>
-                        <Button fx:id="deleteEventBtn" onAction="#deleteEvent" mnemonicParsing="false" text="Usuń">
+                        <Button fx:id="deleteEventBtn" mnemonicParsing="false" onAction="#deleteEvent" text="Usuń">
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin>
@@ -45,28 +45,13 @@
                   <Label text="Data wydarzenia" />
                   <DatePicker fx:id="newEventDatePicker" />
                   <Label text="Tytuł" />
-                  <TextField fx:id="TitleText" />
+                  <TextField fx:id="titleText" />
                   <Label text="Opis" />
                   <TextArea fx:id="descText" prefHeight="143.0" prefWidth="261.0" />
                   <Label text="Lokalizacja" />
-                  <ListView fx:id="locationsList" prefHeight="65.0" prefWidth="257.0" />
-                  <Button fx:id="addEventBtn" onAction="#addEvent" mnemonicParsing="false" text="Dodaj wydarzenie" />
-                  <Separator prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Separator>
-                  <Label text="Nowa lokacja" />
-                  <HBox prefHeight="35.0" prefWidth="257.0">
-                     <children>
-                        <TextField fx:id="newLocText">
-                           <HBox.margin>
-                              <Insets right="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button fx:id="newLocBtn" mnemonicParsing="false" text="Dodaj" />
-                     </children>
-                  </HBox>
+                  <TextField fx:id="locationText" />
+                  <Button fx:id="addEventBtn" mnemonicParsing="false" onAction="#addEvent" text="Dodaj wydarzenie" />
+                  <HBox prefHeight="35.0" prefWidth="257.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

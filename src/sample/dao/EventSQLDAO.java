@@ -6,9 +6,12 @@ import sample.model.Repository.Observer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify, Event> {
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void onUpdate(repoNotify notify, Event payload) {
@@ -51,16 +54,20 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
         Connection conn = connect();
         if (conn == null) return;
 
-        String SQL = "INSERT INTO events(ID, title, description, locations) VALUES(?, ?, ?, ?)";
+        String SQL = "INSERT INTO events(ID, title, date, description, locations) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
             pstmt.setString(1, ev.getUniqueID());
             pstmt.setString(2, ev.getTitle());
-            pstmt.setString(3, ev.getDescription());
+
+            String date = sdf.format(ev.getDateTime());
+
+            pstmt.setString(3, date);
+            pstmt.setString(4, ev.getDescription());
 
             //TODO: location as other table
             String result = String.join(", ", ev.getLocations());
-            pstmt.setString(4, result);
+            pstmt.setString(5, result);
 
             Boolean allgood = pstmt.execute();
             if (allgood){
