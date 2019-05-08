@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 public class EventManager {
     private LinkedListRepository<Event> repository;
-    private EventSQLDAO eventSQLDAO = new EventSQLDAO();
+    private EventSQLDAO eventSQLDAO;
 
     public EventManager() {
         this.repository = new LinkedListRepository<>();
@@ -27,6 +27,28 @@ public class EventManager {
 
     public boolean addEvent(Event ev){
         return this.repository.add(ev);
+    }
+
+    public void addSQLDAO(){
+        if(eventSQLDAO == null){
+            eventSQLDAO = new EventSQLDAO();
+            repository.registerObserver(eventSQLDAO);
+        }
+    }
+
+    public void removeSQLDAO(){
+        if(eventSQLDAO != null){
+            repository.unregisterObserver(eventSQLDAO);
+            eventSQLDAO = null;
+        }
+    }
+
+    public void addDAO(EventSQLDAO obs){
+        repository.registerObserver(obs);
+    }
+
+    public void removeDAO(EventSQLDAO obs){
+        repository.unregisterObserver(obs);
     }
 
     public List<Event> getEventsWithLocation(List<String> Location){

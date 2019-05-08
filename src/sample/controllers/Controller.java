@@ -129,6 +129,8 @@ public class Controller implements Initializable{
         eventListProperty.set(observableList);
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
         eventManager = new EventManager(observableList);
+        eventManager.addSQLDAO();
+
 //        eventListView.setCellFactory(new Callback<ListView<Event>, ListCell<Event>>(){
 
 //            @Override
