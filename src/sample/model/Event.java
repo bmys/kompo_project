@@ -99,4 +99,10 @@ public class Event {
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }
+
+    @Override
+    public String toString() {
+        return "title='" + title + '\'' +
+                '}';
+    }
 }

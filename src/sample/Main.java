@@ -71,15 +71,15 @@ public class Main extends Application {
 
 
 
-//        launch(args);
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.SECOND, 15);
-
-        Event ev2 = new Event("Hello", new Date());
-
-        Reminder reminder = new Reminder(ev2, cal.getTime());
-        while(!reminder.checkTime(new Date()));
-//        MyThread myThread = new MyThread(reminder);
+        launch(args);
+//        Calendar cal = new GregorianCalendar();
+//        cal.add(Calendar.SECOND, 15);
+//
+//        Event ev2 = new Event("Hello", new Date());
+//
+//        Reminder reminder = new Reminder(ev2, cal.getTime());
+//        while(!reminder.checkTime(new Date()));
+////        MyThread myThread = new MyThread(reminder);
 //
 
 

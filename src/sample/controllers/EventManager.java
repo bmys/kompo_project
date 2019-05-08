@@ -114,4 +114,8 @@ public class EventManager {
     private Predicate<Event> locsQuery(List<String> locations){
         return ev -> ev.getLocations().containsAll(locations);
     }
+
+    public List<Event> getAll(){
+        return repository.getAll();
+    }
 }

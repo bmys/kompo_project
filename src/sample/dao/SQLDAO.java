@@ -7,7 +7,7 @@ public class SQLDAO {
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "test123";
+    static final String PASS = "bartek123";
 
     public Connection connect(){
         Connection conn = null;
