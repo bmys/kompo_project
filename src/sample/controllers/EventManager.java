@@ -17,7 +17,12 @@ public class EventManager {
 
     public EventManager() {
         this.repository = new LinkedListRepository<>();
-        this.repository.registerObserver(eventSQLDAO);
+        //this.repository.registerObserver(eventSQLDAO);
+    }
+
+    public EventManager(List<Event> list) {
+        this.repository = new LinkedListRepository<>(list);
+        //this.repository.registerObserver(eventSQLDAO);
     }
 
     public boolean addEvent(Event ev){
@@ -63,6 +68,10 @@ public class EventManager {
         qr.filter(dateQuery(dateQr.older, date));
 
         return repository.remove(qr);
+    }
+
+    public Boolean removeEvent(Event ev){
+        return repository.remove(ev);
     }
 
     public Boolean changeDate(Event event, Date time){
