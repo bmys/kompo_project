@@ -27,7 +27,7 @@
                   </ListView>
                   <HBox prefHeight="31.0" prefWidth="198.0">
                      <children>
-                        <Button fx:id="deleteEventBtn" mnemonicParsing="false" text="Usuń">
+                        <Button fx:id="deleteEventBtn" onAction="#deleteEvent" mnemonicParsing="false" text="Usuń">
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin>
