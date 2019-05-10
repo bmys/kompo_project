@@ -66,6 +66,12 @@ public class Controller implements Initializable{
     @FXML
     private DatePicker toDatePicker;
 
+    @FXML
+    private ChoiceBox hourChooseBox;
+
+    @FXML
+    private ChoiceBox MinuteChooseBox;
+
     public void addEvent(){
         String title = titleText.getText();
 
@@ -77,6 +83,12 @@ public class Controller implements Initializable{
         }
         else{
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            int hour = Integer.parseInt(String.valueOf(hourChooseBox.getSelectionModel().getSelectedItem()));
+            instant = instant.plusSeconds(hour * 3600);
+
+            int minute = Integer.parseInt(String.valueOf(MinuteChooseBox.getSelectionModel().getSelectedItem()));
+            instant = instant.plusSeconds(minute * 60);
+
             date = Date.from(instant);
         }
 
@@ -118,6 +130,15 @@ public class Controller implements Initializable{
         eventListProperty.set(observableList);
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
 
+        for (int i = 0; i <= 23; i++) {
+            hourChooseBox.getItems().add(i);
+        }
+        hourChooseBox.getSelectionModel().selectFirst();
+
+        for (int i = 0; i <= 59; i++) {
+            MinuteChooseBox.getItems().add(i);
+        }
+        MinuteChooseBox.getSelectionModel().selectFirst();
     }
 
     private Date localToDate(LocalDate localDate){
