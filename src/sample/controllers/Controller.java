@@ -2,6 +2,8 @@ package sample.controllers;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,7 +14,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import sample.model.Event;
 
-import java.awt.*;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,6 +33,17 @@ public class Controller implements Initializable{
         System.out.println("HEllo!");
         eventManager.addSQLDAO();
     }
+    @FXML
+    private Label titleLabel;
+
+    @FXML
+    private Label dateLabel;
+
+    @FXML
+    private Label descLabel;
+
+    @FXML
+    private Label locLabel;
 
     @FXML
     private TextField titleText;
@@ -168,5 +180,17 @@ public class Controller implements Initializable{
 
         List<Event> evs =  eventManager.getEventsFromDay(from);
         observableList.addAll(evs);
+
+        eventListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Event>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Event> observable, Event oldValue, Event newValue) {
+                if(newValue == null) return;
+                titleLabel.setText(newValue.getTitle());
+                dateLabel.setText(newValue.getDateTime().toString());
+                descLabel.setText(newValue.getDescription());
+                locLabel.setText(newValue.getLocations().toString());
+            }
+        });
     }
 }
