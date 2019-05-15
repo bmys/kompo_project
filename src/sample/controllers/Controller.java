@@ -154,8 +154,8 @@ public class Controller implements Initializable{
     }
 
     public void updateEventList(){
-        observableList.removeAll(observableList);
-
+//        observableList.removeAll(observableList);
+        observableList.clear();
         Date from = localToDate(listDatePicker.getValue());
 
         if(useTimeBoundCheck.isSelected()){
