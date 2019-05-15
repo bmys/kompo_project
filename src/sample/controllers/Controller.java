@@ -6,12 +6,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import sample.model.Event;
 
 import java.net.URL;
@@ -117,10 +119,11 @@ public class Controller implements Initializable{
     }
 
     public void deleteEvent(){
-        Event ev = eventListView.getSelectionModel().getSelectedItem();
-        if(ev != null){
-            eventManager.removeEvent(ev);
-        }
+        List<Event> ev = eventListView.getSelectionModel().getSelectedItems();
+        ev.forEach(eventManager::removeEvent);
+//        if(ev != null){
+//            eventManager.removeEvent(ev);
+//        }
         System.out.println(observableList);
         System.out.println(eventManager.getAll());
         updateEventList();
@@ -180,17 +183,34 @@ public class Controller implements Initializable{
 
         List<Event> evs =  eventManager.getEventsFromDay(from);
         observableList.addAll(evs);
+        eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        eventListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Event>() {
-
+//        eventListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue == null) return;
+//            titleLabel.setText(newValue.getTitle());
+//            dateLabel.setText(newValue.getDateTime().toString());
+//            descLabel.setText(newValue.getDescription());
+//            locLabel.setText(newValue.getLocations().toString());
+        eventListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Event> observable, Event oldValue, Event newValue) {
-                if(newValue == null) return;
-                titleLabel.setText(newValue.getTitle());
-                dateLabel.setText(newValue.getDateTime().toString());
-                descLabel.setText(newValue.getDescription());
-                locLabel.setText(newValue.getLocations().toString());
+            public void handle(MouseEvent mouseEvent) {
+                ObservableList<Event> selectedItems =  eventListView.getSelectionModel().getSelectedItems();
+
+                if(selectedItems.size() == 1){
+                    if(selectedItems.get(0) == null) return;
+                    Event item = selectedItems.get(0);
+            titleLabel.setText(item.getTitle());
+            dateLabel.setText(item.getDateTime().toString());
+            descLabel.setText(item.getDescription());
+            locLabel.setText(item.getLocations().toString());
             }
+            else{
+                    titleLabel.setText("tytuł");
+                    dateLabel.setText("data");
+                    descLabel.setText("opis");
+                    locLabel.setText("lokacje");
+                }
+        }
         });
     }
 }
