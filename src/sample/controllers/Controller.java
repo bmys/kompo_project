@@ -2,18 +2,11 @@ package sample.controllers;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import sample.model.Event;
 
 import java.net.URL;
@@ -21,20 +14,16 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.List;
 
-public class Controller implements Initializable{
-//    private ObservableList<Event> observableList;
-//    private List<Event> eventList = new ArrayList<>();
+public class Controller implements Initializable {
 
     private ObservableList<Event> observableList;
-    private ListProperty<Event> eventListProperty;
     private EventManager eventManager = new EventManager(new LinkedList<>());
 
     public Controller() {
-        System.out.println("HEllo!");
         eventManager.addSQLDAO();
     }
+
     @FXML
     private Label titleLabel;
 
@@ -52,15 +41,6 @@ public class Controller implements Initializable{
 
     @FXML
     private ListView<Event> eventListView;
-
-    @FXML
-    private Button addEventBtn;
-
-    @FXML
-    private Button changeDateBtn;
-
-    @FXML
-    private Button deleteEventBtn;
 
     @FXML
     private DatePicker newEventDatePicker;
@@ -81,21 +61,20 @@ public class Controller implements Initializable{
     private DatePicker toDatePicker;
 
     @FXML
-    private ChoiceBox hourChooseBox;
+    private ChoiceBox<Integer> hourChooseBox;
 
     @FXML
-    private ChoiceBox MinuteChooseBox;
+    private ChoiceBox<Integer> MinuteChooseBox;
 
-    public void addEvent(){
+    public void addEvent() {
         String title = titleText.getText();
 
         LocalDate localDate = newEventDatePicker.getValue();
 
         Date date;
-        if(localDate == null){
+        if (localDate == null) {
             date = new Date();
-        }
-        else{
+        } else {
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             int hour = Integer.parseInt(String.valueOf(hourChooseBox.getSelectionModel().getSelectedItem()));
             instant = instant.plusSeconds(hour * 3600);
@@ -113,27 +92,17 @@ public class Controller implements Initializable{
         eventManager.addEvent(new Event(title, date, desc, locationList));
 
         updateEventList();
-//        eventListView.getItems().clear();
-//        eventListView.getItems().addAll(eventList);
-
     }
 
-    public void deleteEvent(){
+    public void deleteEvent() {
         List<Event> ev = eventListView.getSelectionModel().getSelectedItems();
         ev.forEach(eventManager::removeEvent);
-//        if(ev != null){
-//            eventManager.removeEvent(ev);
-//        }
         System.out.println(observableList);
         System.out.println(eventManager.getAll());
         updateEventList();
-
-//        System.out.println(eve);
-//        System.out.println(eventList);
-
     }
 
-    public void changeGoDate(){
+    public void changeGoDate() {
         toDatePicker.setDisable(!useTimeBoundCheck.isSelected());
         updateEventList();
     }
@@ -141,7 +110,7 @@ public class Controller implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableList = FXCollections.observableArrayList();
-        eventListProperty = new SimpleListProperty<>();
+        ListProperty<Event> eventListProperty = new SimpleListProperty<>();
         eventListProperty.set(observableList);
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
 
@@ -156,61 +125,49 @@ public class Controller implements Initializable{
         MinuteChooseBox.getSelectionModel().selectFirst();
     }
 
-    private Date localToDate(LocalDate localDate){
+    private Date localToDate(LocalDate localDate) {
         Date date;
-        if(localDate == null){
+        if (localDate == null) {
             date = new Date();
-        }
-        else{
+        } else {
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             date = Date.from(instant);
         }
         return date;
     }
 
-    public void updateEventList(){
-//        observableList.removeAll(observableList);
+    public void updateEventList() {
         observableList.clear();
         Date from = localToDate(listDatePicker.getValue());
 
-        if(useTimeBoundCheck.isSelected()){
+        if (useTimeBoundCheck.isSelected()) {
             Date to = localToDate(toDatePicker.getValue());
-            List<Event> evs = eventManager.getEventsfromTimeBound(from ,to);
+            List<Event> evs = eventManager.getEventsFromTimeBound(from, to);
             System.out.println(evs);
             observableList.addAll(evs);
             return;
         }
 
-        List<Event> evs =  eventManager.getEventsFromDay(from);
+        List<Event> evs = eventManager.getEventsFromDay(from);
         observableList.addAll(evs);
         eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-//        eventListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue == null) return;
-//            titleLabel.setText(newValue.getTitle());
-//            dateLabel.setText(newValue.getDateTime().toString());
-//            descLabel.setText(newValue.getDescription());
-//            locLabel.setText(newValue.getLocations().toString());
-        eventListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                ObservableList<Event> selectedItems =  eventListView.getSelectionModel().getSelectedItems();
+        eventListView.setOnMouseClicked(mouseEvent -> {
+            ObservableList<Event> selectedItems = eventListView.getSelectionModel().getSelectedItems();
 
-                if(selectedItems.size() == 1){
-                    if(selectedItems.get(0) == null) return;
-                    Event item = selectedItems.get(0);
-            titleLabel.setText(item.getTitle());
-            dateLabel.setText(item.getDateTime().toString());
-            descLabel.setText(item.getDescription());
-            locLabel.setText(item.getLocations().toString());
+            if (selectedItems.size() == 1) {
+                if (selectedItems.get(0) == null) return;
+                Event item = selectedItems.get(0);
+                titleLabel.setText(item.getTitle());
+                dateLabel.setText(item.getDateTime().toString());
+                descLabel.setText(item.getDescription());
+                locLabel.setText(item.getLocations().toString());
+            } else {
+                titleLabel.setText("tytuł");
+                dateLabel.setText("data");
+                descLabel.setText("opis");
+                locLabel.setText("lokacje");
             }
-            else{
-                    titleLabel.setText("tytuł");
-                    dateLabel.setText("data");
-                    descLabel.setText("opis");
-                    locLabel.setText("lokacje");
-                }
-        }
         });
     }
 }

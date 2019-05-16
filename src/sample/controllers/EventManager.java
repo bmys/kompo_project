@@ -7,7 +7,6 @@ import sample.model.Repository.LinkedListRepository;
 import sample.model.Repository.Query;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class EventManager {
         return repository.getAll(qr);
     }
 
-    public List<Event> getEventsfromTimeBound(Date dateFirst, Date dateSecond){
+    public List<Event> getEventsFromTimeBound(Date dateFirst, Date dateSecond){
         Query<Event> qr = new Query<>();
                 qr
                 .filter(dateQuery(dateQr.newer, dateFirst))
