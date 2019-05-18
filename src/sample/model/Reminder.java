@@ -1,10 +1,49 @@
 package sample.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class Reminder {
+    private String uniqueID = UUID.randomUUID().toString();
+
+    private String title;
     private Event ev;
     private Date time;
+
+    public Reminder() {
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Event getEv() {
+        return ev;
+    }
+
+    public void setEv(Event ev) {
+        this.ev = ev;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
     public Reminder(Event ev, Date time) {
         this.ev = ev;

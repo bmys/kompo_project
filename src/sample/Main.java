@@ -46,7 +46,7 @@ public class Main extends Application {
 //        Query<Event> query = new Query<>();
 //        Event event = new Event( "date", new Date() , "description", new ArrayList<String>(Arrays.asList("a", "b")));
 //        EventManager eventManager = new EventManager();
-//        Boolean wynik = eventManager.addEvent(event);
+//        Boolean wynik = eventManager.addReminder(event);
 //        System.out.println(wynik);
 //
 //        Date dt = new Date();
