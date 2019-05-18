@@ -4,9 +4,14 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 import sample.model.Event;
 
 import java.net.URL;
@@ -66,11 +71,8 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox<Integer> MinuteChooseBox;
 
-    public void addEvent() {
-        String title = titleText.getText();
 
-        LocalDate localDate = newEventDatePicker.getValue();
-
+    private Date getHourMinuteDate(LocalDate localDate){
         Date date;
         if (localDate == null) {
             date = new Date();
@@ -84,9 +86,16 @@ public class Controller implements Initializable {
 
             date = Date.from(instant);
         }
+        return date;
+    }
+
+    public void addEvent() {
+        String title = titleText.getText();
+
+        LocalDate localDate = newEventDatePicker.getValue();
+        Date date = getHourMinuteDate(localDate);
 
         String desc = descText.getText();
-
         String locations = locationText.getText().toLowerCase();
         ArrayList<String> locationList = new ArrayList<>(Arrays.asList(locations.split(" ")));
         eventManager.addEvent(new Event(title, date, desc, locationList));
@@ -169,5 +178,58 @@ public class Controller implements Initializable {
                 locLabel.setText("lokacje");
             }
         });
+    }
+
+    public void showCalendarPopUp() {
+        Stage stage = new Stage();
+
+        Popup popup = new Popup();
+        BorderPane borderPane = new BorderPane();
+
+        DatePicker datepicker = new DatePicker();
+        Button btn = new Button("fsdsfd");
+
+        borderPane.getChildren().add(btn);
+        borderPane.getChildren().add(datepicker);
+
+        Scene scene = new Scene(borderPane, 200, 200);
+        stage.setScene(scene);
+        stage.show();
+
+
+        List<Event> ev = eventListView.getSelectionModel().getSelectedItems();
+//        ev.forEach(eventManager::changeDate);
+        updateEventList();
+    }
+
+    public void changeDate(){
+        List<Event> ev = eventListView.getSelectionModel().getSelectedItems();
+
+        if(ev.size() == 0) return;
+
+        LocalDate localDate = newEventDatePicker.getValue();
+
+
+        if (localDate == null){
+            localDate = LocalDate.now();
+        }
+
+        Date date = getHourMinuteDate(localDate);
+
+        eventManager.changeDate(ev, date);
+        updateEventList();
+    }
+
+    public void removeOlderThan() {
+        LocalDate localDate = newEventDatePicker.getValue();
+
+        if (localDate == null){
+            localDate = LocalDate.now();
+        }
+
+        Date date = getHourMinuteDate(localDate);
+
+        eventManager.removeEventsOlderThan(date);
+        updateEventList();
     }
 }

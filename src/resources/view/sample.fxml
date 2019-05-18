@@ -15,7 +15,7 @@
          <children>
             <HBox layoutX="5.0" layoutY="38.0" prefHeight="411.0" prefWidth="485.0">
                <children>
-                  <VBox prefHeight="394.0" prefWidth="198.0">
+                  <VBox prefHeight="411.0" prefWidth="241.0">
                      <children>
                         <DatePicker fx:id="listDatePicker" onAction="#updateEventList" prefHeight="25.0" prefWidth="169.0">
                            <VBox.margin>
@@ -41,19 +41,32 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </ListView>
-                        <HBox prefHeight="31.0" prefWidth="198.0">
+                        <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#deleteEvent" text="Usuń">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="changeDateBtn" mnemonicParsing="false" text="Zmień termin" />
+                              <HBox prefHeight="31.0" prefWidth="198.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#deleteEvent" text="Usuń">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="changeDateBtn" mnemonicParsing="false" onAction="#changeDate" text="Zmień termin" />
+                                 </children>
+                              </HBox>
+                               <HBox prefHeight="100.0" prefWidth="200.0">
+                                   <children>
+                                       <Button fx:id="removeOlderThanBtn" mnemonicParsing="false" onAction="#removeOlderThan" text="Usuń starszę niż" />
+                                   </children>
+                               </HBox>
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="436.0" prefWidth="269.0">
+                  <VBox prefHeight="411.0" prefWidth="238.0">
                      <children>
                         <GridPane prefHeight="248.0" prefWidth="269.0">
                           <columnConstraints>
