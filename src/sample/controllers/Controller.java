@@ -33,7 +33,7 @@ public class Controller implements Initializable {
 
     public Controller() {
         eventManager.addSQLDAO();
-
+        reminderManager.addSQLDAO();
     }
 
     @FXML
