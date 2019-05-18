@@ -285,6 +285,15 @@ public class Controller implements Initializable {
         XMLDAO.saveToFile("test.xml", database);
     }
 
+    public void exportToDataBase(ActionEvent actionEvent) {
+
+    }
+
+    public void importFromDataBase(ActionEvent actionEvent) {
+    }
+
+    public void importFromXML(ActionEvent actionEvent) {
+    }
 
 
     @XmlRootElement(name = "database")

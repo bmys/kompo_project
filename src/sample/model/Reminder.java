@@ -12,15 +12,15 @@ public class Reminder {
 
     private String title;
     @XmlIDREF
-    private Event ev;
+    private Event event;
     private Date time;
 
     public Reminder() {
     }
 
-    public Reminder(String title, Event ev, Date time) {
+    public Reminder(String title, Event event, Date time) {
         this.title = title;
-        this.ev = ev;
+        this.event = event;
         this.time = time;
     }
 
@@ -41,11 +41,11 @@ public class Reminder {
     }
 
     public Event getEv() {
-        return ev;
+        return event;
     }
 
-    public void setEv(Event ev) {
-        this.ev = ev;
+    public void setEv(Event event) {
+        this.event = event;
     }
 
     public Date getTime() {
@@ -56,8 +56,8 @@ public class Reminder {
         this.time = time;
     }
 
-    public Reminder(Event ev, Date time) {
-        this.ev = ev;
+    public Reminder(Event event, Date time) {
+        this.event = event;
         this.time = time;
     }
 
@@ -68,5 +68,12 @@ public class Reminder {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return  title + ' ' +
+                event.getTitle() +
+                " " + time;
     }
 }

@@ -100,9 +100,9 @@
                 <Menu mnemonicParsing="false" text="Plik">
                   <items>
                     <MenuItem onAction="#exportToXML" mnemonicParsing="false" text="Eksport do XML" />
-                    <MenuItem mnemonicParsing="false" text="Import z XML" />
-                    <MenuItem mnemonicParsing="false" text="Eksport do BAZY" />
-                    <MenuItem mnemonicParsing="false" text="IMPORT z BAZY" />
+                    <MenuItem onAction="#importFromXML" mnemonicParsing="false" text="Import z XML" />
+                    <MenuItem onAction="#exportToDataBase" mnemonicParsing="false" text="Eksport do BAZY" />
+                    <MenuItem onAction="#importFromDataBase" mnemonicParsing="false" text="IMPORT z BAZY" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Pomoc">

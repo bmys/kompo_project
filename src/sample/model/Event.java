@@ -1,9 +1,6 @@
 package sample.model;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import javax.xml.bind.JAXB;
 import javax.xml.bind.annotation.*;
 
@@ -108,5 +105,19 @@ public class Event {
     @Override
     public String toString() {
         return  title + " " + dateTime.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(uniqueID, event.uniqueID);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(uniqueID);
     }
 }
