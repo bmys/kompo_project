@@ -12,9 +12,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import sample.dao.XMLDAO;
 import sample.model.Event;
 import sample.model.Reminder;
 
+import javax.xml.bind.annotation.*;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -265,5 +267,30 @@ public class Controller implements Initializable {
         }
 
         updateReminderList();
+    }
+
+    public void exportToXML() {
+        Database database =  new Database();
+        database.setEvents(eventManager.getAll());
+//        XMLDAO.saveToFile("test.xml", database);
+
+        XMLDAO.saveToFile("test.xml", database);
+    }
+
+    @XmlRootElement(name = "events")
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Database
+    {
+
+        @XmlElement(name="event")
+        List<Event> events = new ArrayList<>();
+
+        public List<Event> getEvents() {
+            return events;
+        }
+
+        public void setEvents(List<Event> events) {
+            this.events = events;
+        }
     }
 }
