@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import sample.model.Event;
+import sample.model.Reminder;
 
 import java.net.URL;
 import java.time.Instant;
@@ -23,10 +24,14 @@ import java.util.*;
 public class Controller implements Initializable {
 
     private ObservableList<Event> observableList;
+    private ObservableList<Reminder> observableReminderList;
+
     private EventManager eventManager = new EventManager(new LinkedList<>());
+    private ReminderManager reminderManager= new ReminderManager(new LinkedList<>());
 
     public Controller() {
         eventManager.addSQLDAO();
+
     }
 
     @FXML
@@ -71,6 +76,8 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox<Integer> MinuteChooseBox;
 
+    @FXML
+    private ListView<Reminder> reminderListView;
 
     private Date getHourMinuteDate(LocalDate localDate){
         Date date;
@@ -106,9 +113,11 @@ public class Controller implements Initializable {
     public void deleteEvent() {
         List<Event> ev = eventListView.getSelectionModel().getSelectedItems();
         ev.forEach(eventManager::removeEvent);
+        ev.forEach(reminderManager::removeReminder);
         System.out.println(observableList);
         System.out.println(eventManager.getAll());
         updateEventList();
+        updateReminderList();
     }
 
     public void changeGoDate() {
@@ -122,6 +131,11 @@ public class Controller implements Initializable {
         ListProperty<Event> eventListProperty = new SimpleListProperty<>();
         eventListProperty.set(observableList);
         eventListView.itemsProperty().bindBidirectional(eventListProperty);
+
+        observableReminderList = FXCollections.observableArrayList();
+        ListProperty<Reminder> reminderListProperty = new SimpleListProperty<>();
+        reminderListProperty.set(observableReminderList);
+        reminderListView.itemsProperty().bindBidirectional(reminderListProperty);
 
         for (int i = 0; i <= 23; i++) {
             hourChooseBox.getItems().add(i);
@@ -143,6 +157,11 @@ public class Controller implements Initializable {
             date = Date.from(instant);
         }
         return date;
+    }
+
+    public void updateReminderList(){
+        observableReminderList.clear();
+        observableReminderList.addAll(reminderManager.getAll());
     }
 
     public void updateEventList() {
@@ -231,5 +250,20 @@ public class Controller implements Initializable {
 
         eventManager.removeEventsOlderThan(date);
         updateEventList();
+    }
+
+    public void createReminder(ActionEvent actionEvent) {
+        String title = titleText.getText();
+
+        LocalDate localDate = newEventDatePicker.getValue();
+        Date date = getHourMinuteDate(localDate);
+
+        ObservableList<Event> selectedItems = eventListView.getSelectionModel().getSelectedItems();
+
+        for(Event ev: selectedItems){
+            reminderManager.addReminder(new Reminder(title, ev, date));
+        }
+
+        updateReminderList();
     }
 }

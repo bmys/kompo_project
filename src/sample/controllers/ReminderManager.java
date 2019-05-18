@@ -1,10 +1,13 @@
 package sample.controllers;
 
 import sample.dao.ReminderSQLDAO;
+import sample.model.Event;
 import sample.model.Reminder;
 import sample.model.Repository.LinkedListRepository;
+import sample.model.Repository.Query;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ReminderManager {
     private LinkedListRepository<Reminder> repository;
@@ -50,7 +53,18 @@ public class ReminderManager {
         return repository.remove(rem);
     }
 
+    public Boolean removeReminder(Event ev){
+        Query<Reminder> qr = new Query<>();
+        qr.filter(eventQuery(ev));
+
+        return repository.remove(qr);
+    }
+
     public List<Reminder> getAll(){
         return repository.getAll();
+    }
+
+    private Predicate<Reminder> eventQuery(Event event){
+        return ev -> ev.getEv().equals(event);
     }
 }
