@@ -270,16 +270,52 @@ public class Controller implements Initializable {
     }
 
     public void exportToXML() {
+        EventsDatabase eventsDatabase = new EventsDatabase();
+        eventsDatabase.setEvents(eventManager.getAll());
+
+        RemindersDatabase remindersDatabase = new RemindersDatabase();
+        remindersDatabase.setReminders(reminderManager.getAll());
+
         Database database =  new Database();
-        database.setEvents(eventManager.getAll());
+        database.setEventsDatabase(eventsDatabase);
+        database.setRemindersDatabase(remindersDatabase);
+
 //        XMLDAO.saveToFile("test.xml", database);
 
         XMLDAO.saveToFile("test.xml", database);
     }
 
-    @XmlRootElement(name = "events")
+
+
+    @XmlRootElement(name = "database")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Database
+    {
+        @XmlElement(name="events")
+        EventsDatabase eventsDatabase;
+        @XmlElement(name="reminders")
+        RemindersDatabase remindersDatabase;
+
+        public EventsDatabase getEventsDatabase() {
+            return eventsDatabase;
+        }
+
+        public void setEventsDatabase(EventsDatabase eventsDatabase) {
+            this.eventsDatabase = eventsDatabase;
+        }
+
+        public RemindersDatabase getRemindersDatabase() {
+            return remindersDatabase;
+        }
+
+        public void setRemindersDatabase(RemindersDatabase remindersDatabase) {
+            this.remindersDatabase = remindersDatabase;
+        }
+    }
+
+
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class EventsDatabase
     {
 
         @XmlElement(name="event")
@@ -293,4 +329,22 @@ public class Controller implements Initializable {
             this.events = events;
         }
     }
-}
+
+
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class RemindersDatabase
+    {
+
+        @XmlElement(name="reminder")
+        List<Reminder> reminders = new ArrayList<>();
+
+        public List<Reminder> getReminders() {
+            return reminders;
+        }
+
+        public void setReminders(List<Reminder> reminders) {
+            this.reminders = reminders;
+        }
+    }
+    }
+
