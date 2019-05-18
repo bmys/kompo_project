@@ -13,6 +13,12 @@ public class Reminder {
     public Reminder() {
     }
 
+    public Reminder(String title, Event ev, Date time) {
+        this.title = title;
+        this.ev = ev;
+        this.time = time;
+    }
+
     public String getUniqueID() {
         return uniqueID;
     }
