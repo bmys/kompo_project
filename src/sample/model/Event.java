@@ -5,14 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import javax.xml.bind.JAXB;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Event {
-    private String uniqueID = UUID.randomUUID().toString();
+    @XmlAttribute
+    @XmlID
+    private String uniqueID;
     private String title;
     private Date dateTime;
     private String description;
@@ -30,6 +32,7 @@ public class Event {
     }
 
     public Event(String title, Date dateTime, String description, List<String> locations) {
+        this.uniqueID = UUID.randomUUID().toString();
         this.title = title;
         this.dateTime = dateTime;
         this.description = description;
@@ -37,12 +40,14 @@ public class Event {
     }
 
     public Event(String title, Date dateTime) {
+        this.uniqueID = UUID.randomUUID().toString();
         this.title = title;
         this.dateTime = dateTime;
         this.description = "";
     }
 
     public Event(Date dateTime) {
+        this.uniqueID = UUID.randomUUID().toString();
         this.title = "0";
         this.dateTime = dateTime;
         this.description = "1";
@@ -50,6 +55,7 @@ public class Event {
 
 
     public Event(String title, Date dateTime, String description) {
+        this.uniqueID = UUID.randomUUID().toString();
         this.title = title;
         this.dateTime = dateTime;
         this.description = description;
@@ -75,27 +81,26 @@ public class Event {
         return locations;
     }
 
-    @XmlAttribute
     public void setUniqueID(String uniqueID) {
         this.uniqueID = uniqueID;
     }
 
-    @XmlElement
+
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @XmlElement
+
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
-    @XmlElement
+
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @XmlElement
+
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }
