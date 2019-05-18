@@ -1,12 +1,17 @@
 package sample.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlIDREF;
 import java.util.Date;
 import java.util.UUID;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Reminder {
     private String uniqueID = UUID.randomUUID().toString();
 
     private String title;
+    @XmlIDREF
     private Event ev;
     private Date time;
 
