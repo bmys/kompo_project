@@ -86,12 +86,25 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
         Connection conn = connect();
         if (conn == null) return;
 
-        String SQL = "DELETE FROM reminders WHERE event = ?; DELETE FROM events WHERE id = ?";
+        String SQL = "DELETE FROM reminders WHERE event = ?";
+        String SQL2 = "DELETE FROM events WHERE id = ?";
+
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, ev.getUniqueID());
 
             Boolean allgood = pstmt.execute();
+            if (allgood){
+                System.out.println("Query OK! Deleted reminder.");
+            }
+
+            pstmt.close();
+
+            pstmt = conn.prepareStatement(SQL2);
+            pstmt.setString(1, ev.getUniqueID());
+
+            allgood = pstmt.execute();
+
             if (allgood){
                 System.out.println("Query OK! Deleted new event.");
             }
