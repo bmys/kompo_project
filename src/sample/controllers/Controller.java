@@ -45,8 +45,20 @@ public class Controller implements Initializable {
         this.reminderManager = reminderManager;
     }
 
-    public void removeRemainder(Reminder rem) {
-            Platform.runLater(() -> reminderManager.removeReminder(rem));
+    public void removeRemainder() {
+        for (Reminder rem : reminderManager.getAll()) {
+            if (rem.checkTime(new Date())) {
+                System.out.println("Alarm " + rem.getEv().getTitle());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Przypomnienie");
+                alert.setHeaderText("Uwaga wydarzenie");
+                alert.setContentText(rem.getEv().getTitle());
+
+                alert.show();
+                reminderManager.removeReminder(rem);
+            }
+        }
+            updateReminderList();
     }
 
     public List<Reminder> getReminders(){

@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,13 +10,14 @@ import sample.controllers.Controller;
 import sample.controllers.ReminderManager;
 import sample.model.Reminder;
 
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.LinkedList;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../resources/view/sample.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Kalendarz");
@@ -23,37 +25,74 @@ public class Main extends Application {
         ReminderManager reminderManager = new ReminderManager(new LinkedList<>());
         Controller controller = loader.getController();
         controller.setReminderManager(reminderManager);
-        reminderThread myThread = new reminderThread(controller);
-        myThread.start();
-        primaryStage.show();
-    }
+//        reminderThread myThread = new reminderThread(controller);
+//        myThread.start();
+
+
 // https://riptutorial.com/javafx/example/7291/updating-the-ui-using-platform-runlater
-    public class reminderThread extends Thread {
-        Controller controller;
+        Thread thread = new Thread(new Runnable() {
 
-        public reminderThread(Controller controller) {
-            this.controller = controller;
-        }
+            @Override
+            public void run() {
+                Runnable updater = new Runnable() {
 
-        public void run(){
-            while(true){
-                try {
-                    Thread.sleep(1000);
-                    for(Reminder rem: controller.getReminders()){
-                        if(rem.checkTime(new Date())){
-                            System.out.println("Alarm " + rem.getEv().getTitle()) ;
-                            controller.removeRemainder(rem);
+                    @Override
+                    public void run() {
+                        try {
+                           controller.removeRemainder();
+                        }
+                        catch (ConcurrentModificationException e){
+                            System.out.println("Poczekaj");
                         }
                     }
+                };
 
-                } catch (InterruptedException ex) {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                    }
+
+                    // UI update is run on the Application thread
+
+                        Platform.runLater(updater);
                 }
-
-
-
             }
-        }
+
+        });
+        // don't let thread prevent JVM shutdown
+        thread.setDaemon(true);
+        thread.start();
+
+        primaryStage.show();
     }
+//    public class reminderThread extends Thread {
+//        Controller controller;
+//
+//        public reminderThread(Controller controller) {
+//            this.controller = controller;
+//        }
+//
+//        public void run(){
+//            while(true){
+//                try {
+//                    Thread.sleep(1000);
+//                    for(Reminder rem: controller.getReminders()){
+//                        if(rem.checkTime(new Date())){
+//                            System.out.println("Alarm " + rem.getEv().getTitle()) ;
+//                            controller.removeRemainder(rem);
+//                        }
+//                    }
+//
+//                } catch (InterruptedException ex) {
+//                }
+//
+//
+//
+//            }
+//        }
+//    }
+
 
     public static void main(String[] args) {
 //        SQLDAO sql = new SQLDAO();
