@@ -298,6 +298,10 @@ public class Controller implements Initializable {
     }
 
     public void importFromDataBase(ActionEvent actionEvent) {
+        EventSQLDAO eventSQLDAO = new EventSQLDAO();
+        List<Event> eventList = eventSQLDAO.getAllFromDataBase();
+        System.out.println(eventList);
+
     }
 
     public void importFromXML(ActionEvent actionEvent) {

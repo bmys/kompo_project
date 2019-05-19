@@ -1,12 +1,16 @@
 package sample.dao;
 
+import com.mysql.cj.protocol.Resultset;
 import sample.model.Event;
 import sample.model.Repository.Observer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify, Event> {
@@ -236,5 +240,41 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Event>  getAllFromDataBase(){
+
+        List<Event> eventList = new LinkedList<>();
+
+        Connection conn = connect();
+        if (conn == null) return eventList;
+
+        String SQL = "SELECT * FROM events ";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            ResultSet res =pstmt.executeQuery();
+            while(res.next())
+            {
+                Event nevEvent = new Event();
+                nevEvent.setUniqueID(res.getString(1));
+                nevEvent.setTitle(res.getString(2));
+                nevEvent.setDateTime(res.getDate(3));
+                nevEvent.setDescription(res.getString(4));
+                List<String> locations = Arrays.asList(res.getString(5).split("\\s+"));
+                nevEvent.setLocations(locations);
+
+                eventList.add(nevEvent);
+            }
+
+            pstmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(eventList);
+        return eventList;
     }
 }
