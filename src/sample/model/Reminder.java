@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlIDREF;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -59,6 +60,20 @@ public class Reminder {
     public Reminder(Event event, Date time) {
         this.event = event;
         this.time = time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reminder reminder = (Reminder) o;
+        return Objects.equals(uniqueID, reminder.uniqueID);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(uniqueID);
     }
 
     public boolean checkTime(Date currentTime){

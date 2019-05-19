@@ -103,11 +103,12 @@
                     <MenuItem onAction="#importFromXML" mnemonicParsing="false" text="Import z XML" />
                     <MenuItem onAction="#exportToDataBase" mnemonicParsing="false" text="Eksport do BAZY" />
                     <MenuItem onAction="#importFromDataBase" mnemonicParsing="false" text="IMPORT z BAZY" />
+                      <MenuItem fx:id="liveMenu" onAction="#turnLiveSQL" mnemonicParsing="false" text="Włącz live SQL" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Pomoc">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="O programie" />
+                    <MenuItem onAction="#showInfo" mnemonicParsing="false" text="O programie" />
                   </items>
                 </Menu>
               </menus>

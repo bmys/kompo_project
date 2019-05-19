@@ -169,6 +169,7 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
                 pstmt.setString(1, ev.getUniqueID());
                 pstmt.setString(2, ev.getTitle());
                 String date = sdf.format(ev.getDateTime());
+                // TODO: no time
                 pstmt.setString(3, date);
                 pstmt.setString(4, ev.getDescription());
 

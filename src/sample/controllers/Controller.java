@@ -33,6 +33,7 @@ public class Controller implements Initializable {
 
     private EventManager eventManager = new EventManager(new LinkedList<>());
     private ReminderManager reminderManager= new ReminderManager(new LinkedList<>());
+    private boolean isLiveSQLMode = false;
 
     public Controller() {
 //        eventManager.addSQLDAO();
@@ -83,6 +84,9 @@ public class Controller implements Initializable {
 
     @FXML
     private ListView<Reminder> reminderListView;
+
+    @FXML
+    private MenuItem liveMenu;
 
     private Date getHourMinuteDate(LocalDate localDate){
         Date date;
@@ -312,16 +316,69 @@ public class Controller implements Initializable {
         updateEventList();
         ReminderSQLDAO reminderSQLDAO = new ReminderSQLDAO();
         List<Reminder> reminderList = reminderSQLDAO.getAllFromDataBase(eventManager.getAll());
+        
+        for(Reminder rem: reminderList){
+            if(reminderManager.getAll().contains(rem)){
+                int idx = reminderManager.getAll().indexOf(rem);
+                reminderManager.getAll().set(idx, rem);
+            }
+            else{
+                reminderManager.addReminder(rem);
+            }
+        }
 
-        reminderList.forEach(reminderManager::addReminder);
         updateReminderList();
     }
 
     public void importFromXML() {
         Database database = XMLDAO.loadFromFile("test.xml");
-        database.getEventsDatabase().events.forEach(eventManager::addEvent);
-        database.getRemindersDatabase().reminders.forEach(reminderManager::addReminder);
+// TODO: export this loops to function
+        for(Event ev: database.getEventsDatabase().events){
+            if(eventManager.getAll().contains(ev)){
+                int idx = eventManager.getAll().indexOf(ev);
+                eventManager.getAll().set(idx, ev);
+            }
+            else{
+                eventManager.addEvent(ev);
+            }
+        }
+
+        for(Reminder rem: database.getRemindersDatabase().reminders){
+            if(reminderManager.getAll().contains(rem)){
+                int idx = reminderManager.getAll().indexOf(rem);
+                reminderManager.getAll().set(idx, rem);
+            }
+            else{
+                reminderManager.addReminder(rem);
+            }
+        }
+
         updateEventList();
+        updateReminderList();
+    }
+
+    public void showInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("O autorze");
+        alert.setHeaderText("Program kalendarz");
+        alert.setContentText("Wykonany przez Bartosza Myśliwca nr. indeksu 211827");
+
+        alert.showAndWait();
+    }
+
+    public void turnLiveSQL(ActionEvent actionEvent) {
+        if(isLiveSQLMode){
+            isLiveSQLMode = false;
+            liveMenu.setText("Włącz live SQL");
+            eventManager.removeSQLDAO();
+            reminderManager.removeSQLDAO();
+        }
+        else{
+            isLiveSQLMode = true;
+            liveMenu.setText("Wyłącz live SQL");
+            eventManager.addSQLDAO();
+            reminderManager.addSQLDAO();
+        }
     }
 
 
