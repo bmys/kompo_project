@@ -293,7 +293,7 @@ public class Controller implements Initializable {
         eventSQLDAO.insertAll(eventManager.getAll());
 
         ReminderSQLDAO reminderSQLDAO = new ReminderSQLDAO();
-        //reminderSQLDAO.insertAll(eventManager.getAll());
+        reminderSQLDAO.insertAll(reminderManager.getAll());
 
     }
 
@@ -310,6 +310,11 @@ public class Controller implements Initializable {
             }
         }
         updateEventList();
+        ReminderSQLDAO reminderSQLDAO = new ReminderSQLDAO();
+        List<Reminder> reminderList = reminderSQLDAO.getAllFromDataBase(eventManager.getAll());
+
+        reminderList.forEach(reminderManager::addReminder);
+        updateReminderList();
     }
 
     public void importFromXML() {

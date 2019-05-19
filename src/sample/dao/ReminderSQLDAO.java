@@ -6,9 +6,13 @@ import sample.model.Repository.Observer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReminderSQLDAO extends SQLDAO implements Observer<Observer.repoNotify, Reminder> {
 
@@ -45,6 +49,56 @@ public class ReminderSQLDAO extends SQLDAO implements Observer<Observer.repoNoti
         }
     }
 
+    public void insertAll(List<Reminder> rem){
+        onCreateAll(rem);
+    }
+    public List<Reminder> getAllFromDataBase(List<Event> eventList){
+        List<Reminder> reminderList = new LinkedList<>();
+
+        Connection conn = connect();
+        if (conn == null) return reminderList;
+
+        String SQL = "SELECT * FROM reminders";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            ResultSet res =pstmt.executeQuery();
+            while(res.next())
+            {
+                Reminder nevReminder= new Reminder();
+                nevReminder.setUniqueID(res.getString(2));
+                nevReminder.setTitle(res.getString(3));
+                nevReminder.setTime(res.getDate(4));
+//                event
+                Optional ev = eventList.stream().filter(e-> {
+                    try {
+                        return e.getUniqueID().equals(res.getString(5));
+                    } catch (SQLException exc) {
+                        exc.printStackTrace();
+                        return false;
+                    }
+                }).findFirst();
+                if(ev.isPresent()){
+                    nevReminder.setEv((Event)ev.get());
+                }
+                else{
+                    System.out.println("Optional failed");
+                    nevReminder.setEv(null);
+                }
+
+                reminderList.add(nevReminder);
+            }
+
+            pstmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(eventList);
+        return reminderList;
+    }
     private void onCreate(Reminder reminder){
         Connection conn = connect();
         if (conn == null) return;
