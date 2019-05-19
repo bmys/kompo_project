@@ -35,8 +35,8 @@ public class Controller implements Initializable {
     private ReminderManager reminderManager= new ReminderManager(new LinkedList<>());
 
     public Controller() {
-        eventManager.addSQLDAO();
-        reminderManager.addSQLDAO();
+//        eventManager.addSQLDAO();
+//        reminderManager.addSQLDAO();
     }
 
     @FXML
@@ -300,8 +300,16 @@ public class Controller implements Initializable {
     public void importFromDataBase(ActionEvent actionEvent) {
         EventSQLDAO eventSQLDAO = new EventSQLDAO();
         List<Event> eventList = eventSQLDAO.getAllFromDataBase();
-        System.out.println(eventList);
-
+        for(Event ev: eventList){
+            if(eventManager.getAll().contains(ev)){
+                int idx = eventManager.getAll().indexOf(ev);
+                eventManager.getAll().set(idx, ev);
+            }
+            else{
+                eventManager.addEvent(ev);
+            }
+        }
+        updateEventList();
     }
 
     public void importFromXML(ActionEvent actionEvent) {
