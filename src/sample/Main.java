@@ -5,37 +5,52 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.model.Event;
+import sample.controllers.Controller;
+import sample.controllers.ReminderManager;
 import sample.model.Reminder;
 
-import javax.xml.bind.JAXBException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.LinkedList;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../resources/view/sample.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Kalendarz");
         primaryStage.setScene(new Scene(root, 840, 460));
+        ReminderManager reminderManager = new ReminderManager(new LinkedList<>());
+        Controller controller = loader.getController();
+        controller.setReminderManager(reminderManager);
+        reminderThread myThread = new reminderThread(controller);
+        myThread.start();
         primaryStage.show();
     }
+// https://riptutorial.com/javafx/example/7291/updating-the-ui-using-platform-runlater
+    public class reminderThread extends Thread {
+        Controller controller;
 
-    public class MyThread extends Thread {
-        Reminder reminder;
-
-        public MyThread(Reminder rem) {
-            reminder = rem;
+        public reminderThread(Controller controller) {
+            this.controller = controller;
         }
 
         public void run(){
             while(true){
-                if(reminder.checkTime(new Date())){
-                    break;
+                try {
+                    Thread.sleep(1000);
+                    for(Reminder rem: controller.getReminders()){
+                        if(rem.checkTime(new Date())){
+                            System.out.println("Alarm " + rem.getEv().getTitle()) ;
+                            controller.removeRemainder(rem);
+                        }
+                    }
+
+                } catch (InterruptedException ex) {
                 }
+
+
+
             }
         }
     }
@@ -80,7 +95,7 @@ public class Main extends Application {
 //
 //        Reminder reminder = new Reminder(ev2, cal.getTime());
 //        while(!reminder.checkTime(new Date()));
-////        MyThread myThread = new MyThread(reminder);
+////        reminderThread myThread = new reminderThread(reminder);
 //
 
 

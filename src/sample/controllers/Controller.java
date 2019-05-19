@@ -1,5 +1,6 @@
 package sample.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -38,6 +39,18 @@ public class Controller implements Initializable {
     public Controller() {
 //        eventManager.addSQLDAO();
 //        reminderManager.addSQLDAO();
+    }
+
+    public void setReminderManager(ReminderManager reminderManager) {
+        this.reminderManager = reminderManager;
+    }
+
+    public void removeRemainder(Reminder rem) {
+            Platform.runLater(() -> reminderManager.removeReminder(rem));
+    }
+
+    public List<Reminder> getReminders(){
+        return reminderManager.getAll();
     }
 
     @FXML
@@ -266,7 +279,6 @@ public class Controller implements Initializable {
 
         LocalDate localDate = newEventDatePicker.getValue();
         Date date = getHourMinuteDate(localDate);
-
         ObservableList<Event> selectedItems = eventListView.getSelectionModel().getSelectedItems();
 
         for(Event ev: selectedItems){
