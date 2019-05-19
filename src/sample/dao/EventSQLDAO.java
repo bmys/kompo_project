@@ -54,7 +54,9 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
         Connection conn = connect();
         if (conn == null) return;
 
-        String SQL = "INSERT INTO events(ID, title, date, description, locations) VALUES(?, ?, ?, ?, ?)";
+        String SQL = "INSERT INTO events(ID, title, date, description, locations) VALUES(?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "title=VALUES(title), date=VALUES(date), description=VALUES(description), locations=VALUES(locations)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
             pstmt.setString(1, ev.getUniqueID());
@@ -145,20 +147,30 @@ public class EventSQLDAO extends SQLDAO implements Observer<Observer.repoNotify,
         }
     }
 
+    public void insertAll(List<Event> evs){
+        onCreateAll(evs);
+    }
+
     private void onCreateAll(List<Event> evs){
         Connection conn = connect();
         if (conn == null) return;
 
-        String SQL = "INSERT INTO events(ID, title, description, locations) VALUES(?, ?, ?, ?)";
+        String SQL = "INSERT INTO events(ID, title, date, description, locations) VALUES(?, ?, ?, ?, ?)" +
+                "ON DUPLICATE KEY UPDATE " +
+                "title=VALUES(title), date=VALUES(date), description=VALUES(description), locations=VALUES(locations)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             for(Event ev: evs) {
                 pstmt.setString(1, ev.getUniqueID());
-                pstmt.setString(1, ev.getTitle());
-                pstmt.setString(1, ev.getDescription());
+                pstmt.setString(2, ev.getTitle());
+                String date = sdf.format(ev.getDateTime());
+                pstmt.setString(3, date);
+                pstmt.setString(4, ev.getDescription());
+
                 String result = String.join(", ", ev.getLocations());
-                pstmt.setString(1, result);
+                pstmt.setString(5, result);
+
                 pstmt.addBatch();
             }
 

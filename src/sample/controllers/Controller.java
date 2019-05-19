@@ -12,9 +12,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import sample.dao.EventSQLDAO;
+import sample.dao.ReminderSQLDAO;
 import sample.dao.XMLDAO;
 import sample.model.Event;
 import sample.model.Reminder;
+import sample.model.Repository.Observer;
 
 import javax.xml.bind.annotation.*;
 import java.net.URL;
@@ -285,7 +288,12 @@ public class Controller implements Initializable {
         XMLDAO.saveToFile("test.xml", database);
     }
 
-    public void exportToDataBase(ActionEvent actionEvent) {
+    public void exportToDataBase() {
+        EventSQLDAO eventSQLDAO = new EventSQLDAO();
+        eventSQLDAO.insertAll(eventManager.getAll());
+
+        ReminderSQLDAO reminderSQLDAO = new ReminderSQLDAO();
+        //reminderSQLDAO.insertAll(eventManager.getAll());
 
     }
 
