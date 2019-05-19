@@ -297,7 +297,7 @@ public class Controller implements Initializable {
 
     }
 
-    public void importFromDataBase(ActionEvent actionEvent) {
+    public void importFromDataBase() {
         EventSQLDAO eventSQLDAO = new EventSQLDAO();
         List<Event> eventList = eventSQLDAO.getAllFromDataBase();
         for(Event ev: eventList){
@@ -312,7 +312,11 @@ public class Controller implements Initializable {
         updateEventList();
     }
 
-    public void importFromXML(ActionEvent actionEvent) {
+    public void importFromXML() {
+        Database database = XMLDAO.loadFromFile("test.xml");
+        database.getEventsDatabase().events.forEach(eventManager::addEvent);
+        database.getRemindersDatabase().reminders.forEach(reminderManager::addReminder);
+        updateEventList();
     }
 
 

@@ -6,6 +6,7 @@ import sample.model.Event;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -55,5 +56,24 @@ public class XMLDAO {
         }
 
         return false;
+    }
+
+    public static Controller.Database loadFromFile(String filename){
+
+        try{
+            File file = new File(filename);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Controller.Database.class);
+            Unmarshaller jaxbMarshaller = jaxbContext.createUnmarshaller();
+
+//            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            Controller.Database database = (Controller.Database)jaxbMarshaller.unmarshal(file);
+            return database;
+
+        } catch(JAXBException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
