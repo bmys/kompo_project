@@ -25,11 +25,7 @@ public class Main extends Application {
         ReminderManager reminderManager = new ReminderManager(new LinkedList<>());
         Controller controller = loader.getController();
         controller.setReminderManager(reminderManager);
-//        reminderThread myThread = new reminderThread(controller);
-//        myThread.start();
 
-
-// https://riptutorial.com/javafx/example/7291/updating-the-ui-using-platform-runlater
         Thread thread = new Thread(new Runnable() {
 
             @Override
